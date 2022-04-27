@@ -1,9 +1,12 @@
 const express = require("express");
 const httpStatus = require("http-status");
+const router = require("./api/v1/routes");
 
 const app = express();
 
 app.use(express.json());
+
+app.use("/api/v1", router);
 
 app.all("*", (req, res, next) => {
   res.status(httpStatus.NOT_FOUND);
