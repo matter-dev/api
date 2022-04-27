@@ -25,9 +25,16 @@ model Profile {
   tasks  Task[]
 }
 
+enum TaskStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+}
+
 model Task {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   title     String
-  createdBy Profile @relation(fields: [creatorId], references: [id])
+  createdBy Profile    @relation(fields: [creatorId], references: [id])
   creatorId Int
+  status    TaskStatus @default(NEW)
 }

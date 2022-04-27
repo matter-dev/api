@@ -1,35 +1,30 @@
 const httpStatus = require("http-status");
 const db = require("../../../db");
 
-exports.createProfile = async (req, res, next) => {
+exports.createTask = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { title } = req.body;
     const {
       user: { id: userId },
     } = req;
 
-    const existingProfile = await db.profile.findFirst({
+    const profile = await db.profile.findFirst({
       where: {
         userId,
       },
     });
 
-    if (existingProfile) {
-      res.status(httpStatus.CONFLICT);
-      throw new Error("Profile already exists");
-    }
-
-    const profile = await db.profile.create({
+    const task = await db.task.create({
       data: {
-        name,
-        userId,
+        title,
+        creatorId: profile.id,
       },
     });
 
     return res.status(httpStatus.CREATED).json({
       ok: true,
       result: {
-        profile,
+        task,
       },
     });
   } catch (err) {
