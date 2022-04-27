@@ -5,7 +5,7 @@ exports.createProfile = async (req, res, next) => {
   try {
     const { name } = req.body;
     const {
-      user: { id: userId },
+      profile: { userId },
     } = req;
 
     const existingProfile = await db.profile.findFirst({
