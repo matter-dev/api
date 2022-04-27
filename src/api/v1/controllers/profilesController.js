@@ -3,34 +3,35 @@ const argon2 = require("argon2");
 const db = require("../../../db");
 const jsonwebtoken = require("jsonwebtoken");
 
-exports.createUser = async (req, res, next) => {
+exports.createProfile = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { name } = req.body;
+    const {
+      user: { id: userId },
+    } = req;
 
-    const existingUser = await db.user.findFirst({
+    const existingProfile = await db.profile.findFirst({
       where: {
-        email,
+        userId,
       },
     });
 
-    if (existingUser) {
+    if (existingProfile) {
       res.status(httpStatus.CONFLICT);
-      throw new Error("User with this email already exists");
+      throw new Error("Profile already exists");
     }
 
-    const hashedPassword = await argon2.hash(password, { saltLength: 12 });
-
-    const user = await db.user.create({
+    const profile = await db.profile.create({
       data: {
-        email,
-        password: hashedPassword,
+        name,
+        userId,
       },
     });
 
     return res.status(httpStatus.CREATED).json({
       ok: true,
       result: {
-        user,
+        profile,
       },
     });
   } catch (err) {
@@ -116,51 +117,6 @@ exports.getAuthStatus = async (req, res, next) => {
           user,
         },
       });
-    } catch (err) {
-      return res.json({
-        ok: false,
-      });
-    }
-  } catch (err) {
-    return next(err);
-  }
-};
-
-exports.isAuthenticated = async (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-
-    if (!authorization) {
-      res.status(httpStatus.FORBIDDEN);
-      throw new Error("No token provided");
-    }
-
-    const [, token] = authorization.split(" ");
-
-    if (!token) {
-      res.status(httpStatus.FORBIDDEN);
-      throw new Error("Invalid token provided");
-    }
-
-    try {
-      const payload = jsonwebtoken.verify(token, process.env.JWT_SECRET);
-
-      const { sub: userId } = payload;
-
-      const user = await db.user.findFirst({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (!user) {
-        res.status(httpStatus.FORBIDDEN);
-        throw new Error("Invalid token provided");
-      }
-
-      req.user = user;
-
-      return next();
     } catch (err) {
       return res.json({
         ok: false,
