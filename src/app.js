@@ -6,6 +6,12 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  return res.json({
+    ok: true,
+  });
+});
+
 app.use("/api/v1", router);
 
 app.all("*", (req, res, next) => {
