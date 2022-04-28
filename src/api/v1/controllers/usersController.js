@@ -3,6 +3,24 @@ const argon2 = require("argon2");
 const db = require("../../../db");
 const jsonwebtoken = require("jsonwebtoken");
 
+exports.findUserByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const user = await db.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    return res.json({
+      ok: !!user,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.createUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
