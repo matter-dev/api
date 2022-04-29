@@ -45,10 +45,15 @@ exports.createUser = async (req, res, next) => {
       },
     });
 
+    const token = jsonwebtoken.sign({ sub: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "10y",
+    });
+
     return res.status(httpStatus.CREATED).json({
       ok: true,
       result: {
         user,
+        token,
       },
     });
   } catch (err) {
