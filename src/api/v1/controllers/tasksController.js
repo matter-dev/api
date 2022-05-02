@@ -3,21 +3,22 @@ const db = require("../../../db");
 
 exports.createTask = async (req, res, next) => {
   try {
-    const { title } = req.body;
-    const {
-      user: { id: userId },
-    } = req;
+    const { title, projectId } = req.body;
 
-    const profile = await db.profile.findFirst({
+    const project = await db.project.findFirst({
       where: {
-        userId,
+        id: projectId,
       },
     });
 
+    if (!project) {
+      res.status(400);
+      throw new Error("Invalid project id");
+    }
     const task = await db.task.create({
       data: {
         title,
-        creatorId: profile.id,
+        projectId,
       },
     });
 
