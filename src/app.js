@@ -1,8 +1,11 @@
 const express = require("express");
 const httpStatus = require("http-status");
 const router = require("./api/v1/routes");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
