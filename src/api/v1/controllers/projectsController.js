@@ -29,7 +29,7 @@ exports.getProjects = async (req, res, next) => {
 
 exports.createProject = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { name } = req.body;
     const {
       user: { id: userId },
     } = req;
@@ -40,9 +40,9 @@ exports.createProject = async (req, res, next) => {
       },
     });
 
-    const project = await db.task.create({
+    const project = await db.project.create({
       data: {
-        title,
+        name,
         creatorId: profile.id,
       },
     });
