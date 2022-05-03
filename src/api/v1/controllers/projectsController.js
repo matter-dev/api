@@ -19,7 +19,7 @@ exports.getProjects = async (req, res, next) => {
     return res.json({
       ok: true,
       result: {
-        projects,
+        projects: profile.projects,
       },
     });
   } catch (err) {

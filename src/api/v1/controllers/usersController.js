@@ -13,8 +13,6 @@ exports.findUserByEmail = async (req, res, next) => {
       },
     });
 
-    console.log(user);
-
     return res.json({
       ok: !!user,
     });
