@@ -133,10 +133,17 @@ exports.getAuthStatus = async (req, res, next) => {
         throw new Error("Invalid token provided");
       }
 
+      const profile = await db.profile.findFirst({
+        where: {
+          userId: user.id,
+        },
+      });
+
       return res.json({
         ok: true,
         result: {
           user,
+          profile,
         },
       });
     } catch (err) {
