@@ -3,7 +3,7 @@ const db = require("../../../db");
 
 exports.createTask = async (req, res, next) => {
   try {
-    const { title, projectId } = req.body;
+    const { title, description, status, priority, projectId } = req.body;
 
     const project = await db.project.findFirst({
       where: {
@@ -19,6 +19,9 @@ exports.createTask = async (req, res, next) => {
       data: {
         title,
         projectId,
+        description,
+        status,
+        priority,
       },
     });
 

@@ -57,3 +57,29 @@ exports.createProject = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getProjectById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const project = await db.project.findFirst({
+      where: {
+        id: +id,
+      },
+    });
+
+    if (!project) {
+      res.status(httpStatus.NOT_FOUND);
+      throw new Error("Project does not exist");
+    }
+
+    return res.json({
+      ok: true,
+      result: {
+        project,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};

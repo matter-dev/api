@@ -31,6 +31,8 @@ model Project {
   tasks     Task[]
   createdBy Profile? @relation(fields: [creatorId], references: [id])
   creatorId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum TaskStatus {
@@ -39,10 +41,22 @@ enum TaskStatus {
   COMPLETED
 }
 
+enum TaskPriority {
+  CRITICAL
+  HIGH
+  NORMAL
+  LOW
+}
+
 model Task {
-  id        Int        @id @default(autoincrement())
-  title     String
-  belongsTo Project    @relation(fields: [projectId], references: [id])
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String       @default("No description provided")
+  priority    TaskPriority @default(LOW)
+  status      TaskStatus   @default(NEW)
+
+  belongsTo Project  @relation(fields: [projectId], references: [id])
   projectId Int
-  status    TaskStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
