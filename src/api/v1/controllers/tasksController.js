@@ -12,7 +12,7 @@ exports.createTask = async (req, res, next) => {
     });
 
     if (!project) {
-      res.status(400);
+      res.status(httpStatus.BAD_REQUEST);
       throw new Error("Invalid project id");
     }
     const task = await db.task.create({
