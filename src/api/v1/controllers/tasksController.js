@@ -35,3 +35,29 @@ exports.createTask = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getTasksByProjectId = async (req, res, next) => {
+  try {
+    const { projectId } = req.query;
+
+    if (!projectId) {
+      res.status(400);
+      throw new Error("No project id provided");
+    }
+
+    const tasks = await db.task.findMany({
+      where: {
+        projectId: +projectId,
+      },
+    });
+
+    return res.json({
+      ok: true,
+      result: {
+        tasks,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
