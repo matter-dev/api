@@ -5,7 +5,11 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://matter-wheat.vercel.app",
+  })
+);
 
 app.use(express.json());
 
