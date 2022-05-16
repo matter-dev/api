@@ -61,3 +61,58 @@ exports.getTasksByProjectId = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getTaskById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const task = await db.task.findFirst({
+      where: {
+        id: +id,
+      },
+    });
+
+    if (!task) {
+      res.status(404);
+      throw new Error("Invalid Task ID provided");
+    }
+
+    return res.json({
+      ok: true,
+      result: {
+        task,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.patchTask = async (req, res, next) => {
+  try {
+    const { title, description, priority, status } = req.body;
+
+    const { id } = req.params;
+
+    await db.task.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        title,
+        description,
+        priority,
+        status,
+      },
+    });
+
+    return res.json({
+      ok: true,
+      result: {
+        task,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};

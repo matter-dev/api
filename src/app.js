@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://matter-wheat.vercel.app",
+    origin: ["http://localhost:3000", "https://matter-wheat.vercel.app"],
   })
 );
 
