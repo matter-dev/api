@@ -108,9 +108,6 @@ exports.patchTask = async (req, res, next) => {
 
     return res.json({
       ok: true,
-      result: {
-        task,
-      },
     });
   } catch (err) {
     return next(err);
