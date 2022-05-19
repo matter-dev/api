@@ -66,6 +66,9 @@ exports.getProjectById = async (req, res, next) => {
       where: {
         id: +id,
       },
+      include: {
+        tasks: true,
+      },
     });
 
     if (!project) {
